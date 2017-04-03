@@ -2,7 +2,7 @@ import sys
 import youtube_dl
 
 class videoDownloader():
-    __options_pattern = ['username','password','outtmpl','format']
+    __options_pattern = ['username','password','outtmpl','format','noplaylist']
 
     def __init__(self, **kwargs):
         self.ydl_opts = self.__set_values(self.__options_pattern, kwargs)
@@ -26,11 +26,15 @@ class videoDownloader():
 
         try:
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                #ydl.download([url])
-                info_dict = ydl.extract_info(url)
-        except:
+                try:
+                    ydl.extract_info(url)
+                except Exception as e:
+                    print('ERROR: invalid URL')
+                    raise
+
+        except (RuntimeError, TypeError, NameError):
             print('ERROR: downloading fall')
-            sys.exit(1)
+            #sys.exit(1)
         return info_dict
 
     def get_info(self, info, *args):
