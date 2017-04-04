@@ -1,8 +1,14 @@
 import sys
 import youtube_dl
 
+from threading import Thread as tr
+from threading import Lock
+
+
+
 class videoDownloader():
-    __options_pattern = ['username','password','outtmpl','format','noplaylist']
+    __options_pattern = ['username','password','outtmpl','format',\
+    'noplaylist', 'logger', 'progress_hooks']
 
     def __init__(self, **kwargs):
         self.ydl_opts = self.__set_values(self.__options_pattern, kwargs)
@@ -26,15 +32,16 @@ class videoDownloader():
 
         try:
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                try:
-                    ydl.extract_info(url)
-                except Exception as e:
-                    print('ERROR: invalid URL')
-                    raise
+                thread = tr(target= ydl.download, args= ([url], ))
+                lock = Lock()
+                with lock:
+                    #thread = tr(target= ydl.download, args= ([url], ))
+                    thread.start()
+
 
         except (RuntimeError, TypeError, NameError):
             print('ERROR: downloading fall')
-            #sys.exit(1)
+            raise
         return info_dict
 
     def get_info(self, info, *args):
