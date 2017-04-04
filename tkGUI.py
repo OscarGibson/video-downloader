@@ -19,6 +19,10 @@ class GUIToDownloader(tk.Tk):
     def __init__(self,*args,**kwargs):
         tk.Tk.__init__(self,*args,**kwargs)
 
+        self.iconbitmap('@icon.xbm')
+        self.title("Youtube Downloader")
+        self.resizable(width=False, height=False)
+
         container = ttk.Frame(self)
 
         container.pack(side='top', fill='both', expand=True)
@@ -32,7 +36,7 @@ class GUIToDownloader(tk.Tk):
 
         self.frames[StartPage] = frame
 
-        frame.grid(row=0, column=0, sticky='nswe')
+        frame.grid(row=0, column=0, sticky='nswe', padx= 10, pady= 10)
 
         self.show_frame(StartPage)
 
@@ -123,8 +127,6 @@ class StartPage(tk.Frame):
         sys.stderr = oldstderr
 
     def format_path(self, path):
-        if path and (path[len(path)-1] != '/'):
-            path += '/'
         path += '%(title)s.%(ext)s'
         return path
 
@@ -147,7 +149,8 @@ class StartPage(tk.Frame):
 
         main_label = ttk.Label(self, text=page_label, font=LARGE_FONT)
 
-        download_button = ttk.Button(self, text='DOWNLOAD', command= lambda:\
+        download_button = ttk.Button(self, text='DOWNLOAD', width= 10,\
+        command= lambda:\
         self.output_data(into=text_output_box,format=check_var.get(), \
         playlist=radio_var.get(), \
         auth=check_up_var.get(), url=url_entry.get(), path=path_entry.get(), \
@@ -159,8 +162,7 @@ class StartPage(tk.Frame):
 
         checkHD_label = ttk.Label(self, text='HD')
         checkHD = tk.Checkbutton(self, text = "HD", variable = check_var, \
-                         onvalue = 1, offvalue = 0, height=2, \
-                         width = 10)
+                         onvalue = 1, offvalue = 0, height=2)
 
         url_label = ttk.Label(self, text="Enter URL to download")
         url_entry = tk.Entry(self, bd= 2)
@@ -186,31 +188,31 @@ class StartPage(tk.Frame):
         single_video_radio = ttk.Radiobutton(self, text="single video", \
             variable=radio_var, value=0)
 
-        text_output_box = tk.Text(self, wrap= 'word', height= 11, width= 80,\
+        text_output_box = tk.Text(self, wrap= 'word', height= 15, width= 100,\
         state= 'disabled')
 
-        main_label.grid(row=0, sticky='we', padx=10)
+        main_label.grid(row=0, column=0, sticky='', padx=10, columnspan=3)
 
-        url_label.grid(row=1,column=0, sticky='w')
-        url_entry.grid(row=1,column=1)
+        url_label.grid(row=1,column=0, sticky='w', pady= 2)
+        url_entry.grid(row=1,column=1, sticky='w', pady= 2)
 
-        path_label.grid(row=2,column=0, sticky='w')
-        path_entry.grid(row=2,column=1)
-        path_button.grid(row=2,column=2)
+        path_label.grid(row=2,column=0, sticky='w', pady= 2)
+        path_entry.grid(row=2,column=1, sticky='w', pady= 2)
+        path_button.grid(row=2,column=0, sticky='e', pady= 2)
 
-        check_UP.grid(row=3,column=0)
+        check_UP.grid(row=3,column=0, sticky='w', pady= 2)
 
-        uname_label.grid(row=4,column=0, sticky='w')
-        uname_entry.grid(row=4,column=1)
+        uname_label.grid(row=4,column=0, sticky='w', pady= 2)
+        uname_entry.grid(row=4,column=1, sticky='w', pady= 2)
 
-        pass_label.grid(row=5,column=0, sticky='w')
-        pass_entry.grid(row=5,column=1)
+        pass_label.grid(row=5,column=0, sticky='w', pady= 2)
+        pass_entry.grid(row=5,column=1, sticky='w', pady= 2)
 
-        checkHD.grid(column=2,row=1)
+        checkHD.grid(column=2,row=1, sticky='w', pady= 2)
 
         playlist_radio.grid(column=2,row=2, sticky='w')
         single_video_radio.grid(column=2,row=3, sticky='w')
 
-        download_button.grid(column=2,row=4, rowspan= 2)
+        download_button.grid(column=2,row=4, rowspan= 2, sticky='w')
 
-        text_output_box.grid(row=6, column=0, columnspan=2)
+        text_output_box.grid(row=6, column=0, columnspan=3)
